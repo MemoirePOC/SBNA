@@ -26,8 +26,8 @@ l'ASECNA — cas de l'espace aérien du Niger »*.
 
 st.markdown(
     """
-Développé par : M. BATIMSOGA Sanbena
-                Mlle BACKITA BOUSSAMBA Olivia
+Développé par : **M. BATIMSOGA Sanbena** & 
+                **Mlle BACKITA BOUSSAMBA Olivia**
 """
 )
 
