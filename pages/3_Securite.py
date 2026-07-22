@@ -23,11 +23,20 @@ data = pipeline.load_pipeline()
 
 # ═══════════════════════ Id1 — Minimum du taux de rapprochement ═══════════
 st.header("Id1 — Minimum des taux de rapprochement des aéronefs")
-st.caption("Module 8 du notebook — closest_point_of_approach sur le dataset TMA_GENERALE (4).")
+st.caption("Module 8 du notebook — closest_point_of_approach.")
+
+DATASETS_ID1 = {
+    "TMA_GENERALE (1)": data.df_tma_general_net,
+    "TMA_GENERALE (2)": data.df_tma_general2_net,
+    "TMA_GENERALE (3)": data.df_tma_general3_net,
+    "TMA_GENERALE (4)": data.df_tma_general4_net,
+    "df_adsb_stca (concaténation des datasets STCA)": data.df_adsb_stca,
+}
+choix_id1 = st.selectbox("Choisir le dataset sur lequel mesurer Id1", list(DATASETS_ID1.keys()), index=3, key="select_id1")
 
 if st.button("Calculer Id1", key="btn_id1"):
     with st.spinner("Calcul d'Id1…"):
-        paires = fn.tab_Tr(data.df_tma_general4_net)
+        paires = fn.tab_Tr(DATASETS_ID1[choix_id1])
         Id1 = paires["Tr"].min()
         paires = fn.ajouter_tolerance(paires, "Id1")
         st.session_state["id1_value"] = Id1
