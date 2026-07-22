@@ -192,8 +192,8 @@ st.header("Id5 — Qualité de l'alignement sur l'axe de piste à l'atterrissage
 st.caption(
     "Module 12 du notebook — écart latéral par rapport à l'axe FAF/FAP RN501 → seuil 09R, "
     "sur le segment d'approche finale uniquement (les points à moins de 1 NM du seuil sont exclus). "
-    "Largeur de référence évasée selon l'Annexe 10 OACI Vol I §3.1.3.6.1 a) (ILS CAT I : ±10,5 m au seuil, "
-    "évasement 2,5°)."
+    "Largeur de référence constante L = 21 m (demi-largeur 10,5 m), selon l'Annexe 10 OACI Vol I "
+    "§3.1.3.6.1 a) (ILS CAT I)."
 )
 
 if st.button("Calculer Id5", key="btn_id5"):

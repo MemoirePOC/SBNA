@@ -1025,28 +1025,20 @@ def ecart_lateral_m(lat, lon):
 def interpretation_ecart(val):
     if pd.isna(val):
         return np.nan
-    if val <= 5:
-        return "Très bien aligné "
-    elif val <= 10:
-        return "Bien aligné "
-    elif val <= 20:
-        return "Alignement acceptable "
-    elif val <= 50:
-        return "Décalé "
-    elif val <= 100:
-        return "Fortement décalé"
+    if val <= 1:
+        return "Bien aligné"
+    elif val <= 1.5:
+        return "Non aligné"
     else:
-        return "Hors bord de piste "
+        return "Fortement décalé"
 
 
 def interpretation_instabilite(val):
     if pd.isna(val):
         return np.nan
-    if val <= 10:
+    if val <= 1:
         return "Stable"
-    elif val <= 20:
-        return "Assez stable"
-    elif val <= 40:
+    elif val <= 1.5:
         return "Instable"
     else:
         return "Très instable"
@@ -1067,6 +1059,10 @@ def largeur_ref_m(dist_seuil_m):
 
 
 def id5_alignement(df_app, cle="icao24"):
+    """Largeur de reference constante L = 21 m (demi-largeur 10,5 m, Annexe 10
+    OACI Vol I 3.1.3.6.1 a) du FAP au seuil. Les points a moins de 1 NM du
+    seuil sont exclus."""
+    demi_largeur = LARGEUR_SEUIL / 2  # 10,5 m, constante
     lignes = []
 
     for _, g in df_app.groupby(cle):
@@ -1079,13 +1075,8 @@ def id5_alignement(df_app, cle="icao24"):
             continue
 
         d = g.apply(lambda r: ecart_lateral_m(r.latitude, r.longitude), axis=1)
-        demi_largeur_pt = g["dist_seuil_nm"].apply(lambda dnm: largeur_ref_m(dnm * 1852.0) / 2)
-
-        ratio_ecart = 100 * d.abs() / demi_largeur_pt
         dmoy = np.abs(d).mean()
         sigma = d.std()
-        id5_ecart = ratio_ecart.mean()
-        id5_instab = 100 * sigma / demi_largeur_pt.mean()
 
         lignes.append({
             "Date": g["timestamp"].iloc[-1].date(),
@@ -1093,12 +1084,9 @@ def id5_alignement(df_app, cle="icao24"):
             "icao24": g["icao24"].iloc[0],
             "Callsign": g["callsign"].iloc[0],
             "Ecart_moy_m": round(dmoy, 1),
-            "Id5_ecart (%)": round(id5_ecart, 1),
-            "Interpretation_ecart": interpretation_ecart(id5_ecart),
+            "Interpretation_ecart": interpretation_ecart(dmoy),
             "Sigma_m": round(sigma, 1),
-            "Id5_instabilite (%)": round(id5_instab, 1),
-            "Interpretation_instabilite": interpretation_instabilite(id5_instab),
-            "Demi_largeur_moy_m": round(demi_largeur_pt.mean(), 1),
+            "Interpretation_instabilite": interpretation_instabilite(sigma),
         })
 
     return pd.DataFrame(lignes).sort_values(["Date", "Heure_arrivee"])
@@ -1204,10 +1192,8 @@ def ajouter_tolerance(df, ind, pr_h=10, pr_v=25):
         df["Tol_marge"] = dnm
 
     elif ind == "Id5":
-        # Largeur variable (evasement 2,5 deg, cf. largeur_ref_m) : on utilise la
-        # demi-largeur moyenne du vol, deja calculee dans id5_alignement, plutot
-        # qu'une largeur fixe au seuil.
-        t = 100 * dd / df["Demi_largeur_moy_m"]
+        # Largeur constante L = 21 m (demi-largeur 10,5 m, Annexe 10 3.1.3.6.1 a)
+        t = 100 * dd / (LARGEUR_SEUIL / 2)
         df["Tol_ecart (%)"] = df["Tol_instabilite (%)"] = t
 
     elif ind == "Id6":
