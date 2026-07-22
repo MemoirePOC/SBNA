@@ -24,6 +24,13 @@ l'ASECNA — cas de l'espace aérien du Niger »*.
 """
 )
 
+st.markdown(
+    """
+Développé par : M. BATIMSOGA Sanbena
+                Mlle BACKITA BOUSSAMBA Olivia
+"""
+)
+
 st.subheader("Objectifs")
 st.markdown(
     """
@@ -46,7 +53,6 @@ st.divider()
 st.subheader("Chargement des données du PoC")
 st.caption(
     "Chargement, nettoyage et construction des espaces aériens \n  "
-
 )
 
 with st.spinner("Chargement…"):
