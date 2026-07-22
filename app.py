@@ -31,6 +31,12 @@ Développé par : **M. BATIMSOGA Sanbena** &
 """
 )
 
+st.markdown(
+    """
+Sous l'encadrement de : **M. MOUSTAPHA Amadou Roufaï**, *Chargé des systèmes de gestion sécurité, sûreté, qualité et environnement, ASECNA Bénin*
+"""
+)
+
 st.subheader("Objectifs")
 st.markdown(
     """
