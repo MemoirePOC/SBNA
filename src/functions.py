@@ -1088,6 +1088,7 @@ def id5_alignement(df_app, cle="icao24"):
         id5_instab = 100 * sigma / demi_largeur_pt.mean()
 
         lignes.append({
+            "Date": g["timestamp"].iloc[-1].date(),
             "Heure_arrivee": g["timestamp"].iloc[-1].strftime("%H:%M:%S"),
             "icao24": g["icao24"].iloc[0],
             "Callsign": g["callsign"].iloc[0],
@@ -1096,10 +1097,11 @@ def id5_alignement(df_app, cle="icao24"):
             "Interpretation_ecart": interpretation_ecart(id5_ecart),
             "Sigma_m": round(sigma, 1),
             "Id5_instabilite (%)": round(id5_instab, 1),
-            "Interpretation_instabilite": interpretation_instabilite(id5_instab)
+            "Interpretation_instabilite": interpretation_instabilite(id5_instab),
+            "Demi_largeur_moy_m": round(demi_largeur_pt.mean(), 1),
         })
 
-    return pd.DataFrame(lignes).sort_values("Heure_arrivee")
+    return pd.DataFrame(lignes).sort_values(["Date", "Heure_arrivee"])
 
 
 # ────────────── 1.6.15 Id6 - Allongement effectif (KPI05 GANP) ─────────────
@@ -1202,7 +1204,10 @@ def ajouter_tolerance(df, ind, pr_h=10, pr_v=25):
         df["Tol_marge"] = dnm
 
     elif ind == "Id5":
-        t = 100 * dd / (LARGEUR / 2)
+        # Largeur variable (evasement 2,5 deg, cf. largeur_ref_m) : on utilise la
+        # demi-largeur moyenne du vol, deja calculee dans id5_alignement, plutot
+        # qu'une largeur fixe au seuil.
+        t = 100 * dd / df["Demi_largeur_moy_m"]
         df["Tol_ecart (%)"] = df["Tol_instabilite (%)"] = t
 
     elif ind == "Id6":
