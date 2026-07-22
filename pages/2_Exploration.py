@@ -9,6 +9,7 @@ déjà produits dans le notebook (taux d'équipement, vols par heure).
 import pandas as pd
 import streamlit as st
 import holoviews as hv
+from streamlit_bokeh import streamlit_bokeh
 
 from src import pipeline
 from src import functions as fn
@@ -57,7 +58,7 @@ diagramme_heures = df_plot_h.hvplot.bar(
     title="Nombre de vols par heure de la journée",
     color="Nb_vols", cmap="Blues",
 )
-st.bokeh_chart(hv.render(diagramme_heures, backend="bokeh"), use_container_width=True)
+streamlit_bokeh(hv.render(diagramme_heures, backend="bokeh"), use_container_width=True, key="chart_vols_heure")
 
 st.divider()
 st.subheader("Taux d'emport par équipement de surveillance (case 10b des FPL)")
@@ -67,7 +68,7 @@ chart_statut = STATUT_EQ.hvplot.bar(
     y="TAUX", height=500, rot=70, color="TAUX", cmap="Set3",
     legend="top_left", title="Taux d'emport par équipement de surveillance",
 )
-st.bokeh_chart(hv.render(chart_statut, backend="bokeh"), use_container_width=True)
+streamlit_bokeh(hv.render(chart_statut, backend="bokeh"), use_container_width=True, key="chart_statut_eq")
 STATUT_EQ.columns = ["TAUX_%"]
 st.dataframe(STATUT_EQ, use_container_width=True)
 
@@ -77,7 +78,7 @@ chart_eq = EQ.hvplot.bar(
     y="TAUX", height=500, rot=70, color="TAUX", cmap="Set3",
     legend="top_left", title="Taux d'emport de transpondeurs SSR et ADS-B",
 )
-st.bokeh_chart(hv.render(chart_eq, backend="bokeh"), use_container_width=True)
+streamlit_bokeh(hv.render(chart_eq, backend="bokeh"), use_container_width=True, key="chart_eq_taux")
 EQ.columns = ["TAUX_%"]
 st.dataframe(EQ, use_container_width=True)
 

@@ -87,19 +87,18 @@ if st.button("Calculer Id3", key="btn_id3"):
                 tr_min.append(pred["Tr"].min())
 
         pertinentes = sum(tr < 1 for tr in tr_min)
-        non_pertinentes = sum(tr >= 1 for tr in tr_min)
-        fausses = len(data.df_STCA) - pertinentes - non_pertinentes
+        non_pertinentes_calc = sum(tr >= 1 for tr in tr_min)
+        fausses = len(data.df_STCA) - pertinentes - non_pertinentes_calc
+        non_pertinentes = non_pertinentes_calc + fausses  # non pertinentes + fausses alertes regroupées
 
         st.session_state["id3_pertinentes"] = pertinentes
         st.session_state["id3_non_pertinentes"] = non_pertinentes
-        st.session_state["id3_fausses"] = fausses
         st.session_state["id3_cand"] = data.df_STCA_cand
 
 if "id3_pertinentes" in st.session_state:
     n_stca = len(data.df_STCA)
     fn.afficher_html(f"Id3_p = {100 * st.session_state['id3_pertinentes'] / n_stca:.2f} % : des alertes d'avril 2026 sont pertinentes", style="erreur")
     fn.afficher_html(f"Id3_non_p = {100 * st.session_state['id3_non_pertinentes'] / n_stca:.2f} % : des alertes d'avril 2026 sont non pertinentes", style="succes")
-    fn.afficher_html(f"Id3_fa = {100 * st.session_state['id3_fausses'] / n_stca:.2f} % : des alertes d'avril 2026 sont des fausses alertes", style="defaut")
     with st.expander("Détail des alertes STCA candidates à l'airprox (Aircraft / Compared Aircraft identifiés)"):
         st.dataframe(st.session_state["id3_cand"], use_container_width=True)
 

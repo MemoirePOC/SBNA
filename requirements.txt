@@ -22,5 +22,6 @@ plotly>=5.22.0
 hvplot>=0.10.0
 holoviews>=1.19.0
 bokeh>=3.4.1
+streamlit-bokeh>=3.4.1
 
 requests>=2.32.3
