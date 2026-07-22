@@ -26,11 +26,11 @@ st.header("Id1 — Minimum des taux de rapprochement des aéronefs")
 st.caption("Module 8 du notebook — closest_point_of_approach.")
 
 DATASETS_ID1 = {
-    "TMA_GENERALE (1)": data.df_tma_general_net,
-    "TMA_GENERALE (2)": data.df_tma_general2_net,
-    "TMA_GENERALE (3)": data.df_tma_general3_net,
-    "TMA_GENERALE (4)": data.df_tma_general4_net,
-    "df_adsb_stca (concaténation des datasets STCA)": data.df_adsb_stca,
+    "TMA_GENERALE (28/10/25)": data.df_tma_general_net,
+    "TMA_GENERALE (10/04/26)": data.df_tma_general2_net,
+    "TMA_GENERALE (09/04/26)": data.df_tma_general3_net,
+    "TMA_GENERALE (08/04/26)": data.df_tma_general4_net,
+    "Dataset STCA 04/26": data.df_adsb_stca,
 }
 choix_id1 = st.selectbox("Choisir le dataset sur lequel mesurer Id1", list(DATASETS_ID1.keys()), index=3, key="select_id1")
 
