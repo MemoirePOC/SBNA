@@ -1,25 +1,25 @@
-streamlit==1.38.0
-streamlit-folium==0.23.1
-folium==0.17.0
+streamlit>=1.38.0
+streamlit-folium>=0.23.1
+folium>=0.17.0
 
-pandas==2.2.2
-numpy==2.0.2
-scipy==1.13.1
+pandas>=2.2.2
+numpy>=2.0.2
+scipy>=1.13.1
 
-traffic==2.10
-openap==1.5
+traffic>=2.10
+openap>=1.5
 
-pywmm==1.1.0
-geopy==2.4.1
-nvector==0.7.7
-pyproj==3.6.1
-shapely==2.0.5
-meteostat==1.6.8
+pywmm>=1.1.0
+geopy>=2.4.1
+nvector>=0.7.7
+pyproj>=3.6.1
+shapely>=2.0.6
+meteostat>=1.6.8
 
-matplotlib==3.9.0
-plotly==5.22.0
-hvplot==0.10.0
-holoviews==1.19.0
-bokeh==3.4.1
+matplotlib>=3.9.0
+plotly>=5.22.0
+hvplot>=0.10.0
+holoviews>=1.19.0
+bokeh>=3.4.1
 
-requests==2.32.3
+requests>=2.32.3
