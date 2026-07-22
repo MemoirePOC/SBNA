@@ -229,11 +229,13 @@ def load_pipeline() -> PoCData:
     modifiee : on echange juste temporairement ce que `display`/`print`
     pointent, le temps de l'appel.
     """
-    original_display, original_print = fn.display, fn.print
+    original_display, original_print, original_afficher_html = fn.display, fn.print, fn.afficher_html
     fn.display = lambda *args, **kwargs: None
     fn.print = lambda *args, **kwargs: None
+    fn.afficher_html = lambda *args, **kwargs: None
     try:
         return _load_pipeline_impl()
     finally:
         fn.display = original_display
         fn.print = original_print
+        fn.afficher_html = original_afficher_html
