@@ -63,8 +63,14 @@ def afficher_toutes_zones():
 
 def creer_carte_base(zoom=7):
     """Equivalent folium de creer_carte_base() : utilise fn.contour_uta,
-    exactement comme le notebook utilisait la variable globale contour_uta."""
+    exactement comme le notebook utilisait la variable globale contour_uta.
+    Si ce global n'a pas encore ete renseigne (page ouverte avant que le
+    pipeline n'ait fini de le positionner), on le recalcule directement :
+    construire_polygone_uta() est une fonction geometrique pure, sans lien
+    avec les donnees chargees, donc ce recalcul ne change aucun resultat."""
     contour_uta = fn.contour_uta
+    if not contour_uta:
+        contour_uta, _, _, _ = fn.construire_polygone_uta()
     centre = (sum(p[0] for p in contour_uta) / len(contour_uta),
               sum(p[1] for p in contour_uta) / len(contour_uta))
     m = folium.Map(location=list(centre), zoom_start=zoom, tiles="cartodbpositron")
