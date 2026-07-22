@@ -1052,21 +1052,42 @@ def interpretation_instabilite(val):
         return "Très instable"
 
 
+# Annexe 10 OACI Vol I, §3.1.3.6.1 a) — ILS CAT I : tolerance d'alignement au seuil
+TOLERANCE_ALIGNEMENT_CAT1 = 10.5  # m
+LARGEUR_SEUIL = 2 * TOLERANCE_ALIGNEMENT_CAT1  # 21 m, largeur au seuil (reference)
+
+# Taux d'evasement du secteur de route : 2,5 degres
+TAUX_EVASEMENT = math.tan(math.radians(2.5))
+
+
+def largeur_ref_m(dist_seuil_m):
+    """Largeur de reference (pleine largeur) au point situe a dist_seuil_m du seuil,
+    par evasement lineaire a partir de LARGEUR_SEUIL (Annexe 10, 3.1.3.6.1 a)."""
+    return LARGEUR_SEUIL + 2 * dist_seuil_m * TAUX_EVASEMENT
+
+
 def id5_alignement(df_app, cle="icao24"):
-    demi_largeur = LARGEUR / 2
     lignes = []
 
     for _, g in df_app.groupby(cle):
-        g = g.sort_values("timestamp")
-        d = g.apply(lambda r: ecart_lateral_m(r.latitude, r.longitude), axis=1)
+        g = g.sort_values("timestamp").copy()
 
+        # Distance au seuil (NM) pour chaque point, puis exclusion du dernier 1 NM
+        g["dist_seuil_nm"] = g.apply(lambda r: _nm(r.latitude, r.longitude, THR09R), axis=1)
+        g = g[g["dist_seuil_nm"] >= 1.0]
+        if g.empty:
+            continue
+
+        d = g.apply(lambda r: ecart_lateral_m(r.latitude, r.longitude), axis=1)
+        demi_largeur_pt = g["dist_seuil_nm"].apply(lambda dnm: largeur_ref_m(dnm * 1852.0) / 2)
+
+        ratio_ecart = 100 * d.abs() / demi_largeur_pt
         dmoy = np.abs(d).mean()
         sigma = d.std()
-        id5_ecart = 100 * dmoy / demi_largeur
-        id5_instab = 100 * sigma / demi_largeur
+        id5_ecart = ratio_ecart.mean()
+        id5_instab = 100 * sigma / demi_largeur_pt.mean()
 
         lignes.append({
-            "Date": g["timestamp"].iloc[-1].date(),
             "Heure_arrivee": g["timestamp"].iloc[-1].strftime("%H:%M:%S"),
             "icao24": g["icao24"].iloc[0],
             "Callsign": g["callsign"].iloc[0],
@@ -1078,7 +1099,7 @@ def id5_alignement(df_app, cle="icao24"):
             "Interpretation_instabilite": interpretation_instabilite(id5_instab)
         })
 
-    return pd.DataFrame(lignes).sort_values(["Date", "Heure_arrivee"])
+    return pd.DataFrame(lignes).sort_values("Heure_arrivee")
 
 
 # ────────────── 1.6.15 Id6 - Allongement effectif (KPI05 GANP) ─────────────

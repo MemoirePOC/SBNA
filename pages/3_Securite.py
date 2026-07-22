@@ -184,3 +184,30 @@ if st.button("Calculer Id4", key="btn_id4"):
 if "id4_df" in st.session_state:
     st.caption("NaT / NaN indiquent que les avions sont sortis de l'espace de couverture des données sans avoir eu à régler le conflit.")
     st.dataframe(st.session_state["id4_df"], use_container_width=True)
+
+st.divider()
+
+# ═══════════════════ Id5 — Alignement de piste à l'atterrissage ═══════════
+st.header("Id5 — Qualité de l'alignement sur l'axe de piste à l'atterrissage")
+st.caption(
+    "Module 12 du notebook — écart latéral par rapport à l'axe FAF/FAP RN501 → seuil 09R, "
+    "sur le segment d'approche finale uniquement (les points à moins de 1 NM du seuil sont exclus). "
+    "Largeur de référence évasée selon l'Annexe 10 OACI Vol I §3.1.3.6.1 a) (ILS CAT I : ±10,5 m au seuil, "
+    "évasement 2,5°)."
+)
+
+if st.button("Calculer Id5", key="btn_id5"):
+    with st.spinner("Calcul d'Id5 sur le segment d'approche finale…"):
+        df_final_tma = fn.construire_df_final(data.df_tma_general2_net)
+        df_final09 = fn.construire_df_final(data.df_approach_net)
+        df_final = pd.concat([df_final09, df_final_tma], ignore_index=True)
+
+        id5_final = fn.id5_alignement(df_final)
+        Id5_final = fn.ajouter_tolerance(id5_final, "Id5")
+
+        st.session_state["id5_df"] = Id5_final
+        st.session_state["df_final_id5"] = df_final
+
+if "id5_df" in st.session_state:
+    fn.afficher_html("Coefficient de variation Id5 en final 09R (FAF/FAP ➡ THR 09R)", style="sous_titre")
+    st.dataframe(st.session_state["id5_df"], use_container_width=True)

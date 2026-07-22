@@ -101,3 +101,17 @@ elif cas["type"] == "route_fpl":
                 st.dataframe(ligne, use_container_width=True)
             else:
                 st.info("Détail Id6 non disponible (recalculez KPI05 sur la page Performance).")
+
+st.divider()
+
+# ═══════════════════ Id5 — Trajectoire SKK046 zoomée sur le seuil 09R ═════
+st.subheader("Trajectoire de SKK046 en approche finale (zoom seuil 09R)")
+
+if "df_final_id5" not in st.session_state:
+    st.warning(
+        "Ce cas réutilise le segment d'approche finale calculé pour l'Id5. "
+        "Allez d'abord sur la page **Sécurité** et cliquez sur « Calculer Id5 », puis revenez ici."
+    )
+else:
+    carte_skk046 = maps.carte_segment_piste(st.session_state["df_final_id5"], callsign="SKK046")
+    st_folium(carte_skk046, width=None, height=500, key="carte_skk046", returned_objects=[])

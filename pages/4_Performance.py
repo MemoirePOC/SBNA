@@ -62,7 +62,7 @@ if st.button("Calculer KPI05 (Id6)", key="btn_id6"):
         d_real = fn.calcul_dreal(traj_vols)
 
         df_id6 = d_fpl.merge(d_real, on="callsign")
-        df_id6["Id5 (%)"] = ((df_id6["D_REEL_nm"] - df_id6["D_FPL_nm"]) / df_id6["D_FPL_nm"] * 100)
+        df_id6["Id6 (%)"] = ((df_id6["D_REEL_nm"] - df_id6["D_FPL_nm"]) / df_id6["D_FPL_nm"] * 100)
         df_id6 = fn.ajouter_tolerance(df_id6, "Id6")
 
         Id6_global = (df_id6["D_REEL_nm"].sum() - df_id6["D_FPL_nm"].sum()) / df_id6["D_FPL_nm"].sum() * 100
@@ -121,7 +121,7 @@ elif st.button("Calculer la consommation de carburant (Id7)", key="btn_id7"):
             resultats.append({"callsign": callsign, "typecode": vol["typecode"].iloc[0], "fuel_kg": round(fuel_total, 1)})
         df_fuel = pd.DataFrame(resultats)
 
-        df_id7 = (df_id6[["callsign", "D_FPL_nm", "D_REEL_nm", "Id5 (%)"]]
+        df_id7 = (df_id6[["callsign", "D_FPL_nm", "D_REEL_nm", "Id6 (%)"]]
                   .merge(df_fuel[["callsign", "typecode", "fuel_kg"]], on="callsign"))
 
         df_id7["FF_nm"] = df_id7["fuel_kg"] / df_id7["D_REEL_nm"]
