@@ -58,7 +58,8 @@ st.caption(
     "Mis en cache : ne s'exécute qu'une seule fois."
 )
 
-data = pipeline.load_pipeline()
+with st.spinner("Chargement…"):
+    data = pipeline.load_pipeline()
 
 st.divider()
 st.subheader("Statistiques générales")

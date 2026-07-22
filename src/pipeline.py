@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 """
 Pipeline de chargement (ex Modules 2, 3, 4, 6 du notebook).
 
@@ -124,8 +124,7 @@ def _construire_df_stca_candidats(df_STCA, df_stca_ssr_net):
     return df_STCA_cand
 
 
-@st.cache_resource(show_spinner="Chargement et nettoyage des données PoC (Modules 1 à 7)…")
-def load_pipeline() -> PoCData:
+def _load_pipeline_impl() -> PoCData:
     d = PoCData()
 
     # ── Module 3 : espaces aeriens ─────────────────────────────────────────
@@ -216,3 +215,25 @@ def load_pipeline() -> PoCData:
     d.df_STCA_cand = _construire_df_stca_candidats(d.df_STCA, d.df_stca_ssr_net)
 
     return d
+
+
+@st.cache_resource(show_spinner="Chargement et nettoyage des données PoC (Modules 1 à 7)…")
+def load_pipeline() -> PoCData:
+    """Version mise en cache de _load_pipeline_impl().
+
+    Rend `display()`/`print()` silencieux le temps du chargement : ce sont
+    de simples journaux de nettoyage (nettoyer_identifiants, etc.), pas des
+    resultats a montrer. Sans ca, Streamlit rejoue ce journal sur CHAQUE
+    page qui appelle load_pipeline() pour la premiere fois (comportement du
+    cache), au lieu de l'afficher une seule fois. Aucune fonction n'est
+    modifiee : on echange juste temporairement ce que `display`/`print`
+    pointent, le temps de l'appel.
+    """
+    original_display, original_print = fn.display, fn.print
+    fn.display = lambda *args, **kwargs: None
+    fn.print = lambda *args, **kwargs: None
+    try:
+        return _load_pipeline_impl()
+    finally:
+        fn.display = original_display
+        fn.print = original_print
