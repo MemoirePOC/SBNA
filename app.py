@@ -45,8 +45,8 @@ st_folium(carte, width=None, height=500, returned_objects=[])
 st.divider()
 st.subheader("Chargement des données du PoC")
 st.caption(
-    "Chargement, nettoyage et construction des espaces aériens \n "
-    "Mis en cache : ne s'exécute qu'une seule fois."
+    "Chargement, nettoyage et construction des espaces aériens \n  "
+
 )
 
 with st.spinner("Chargement…"):
