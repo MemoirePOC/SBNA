@@ -440,7 +440,10 @@ def filtrer_d(df_clean, contour):
         df_clean['longitude'].between(min(lons), max(lons))
     ].copy()
     print(f"Filtre bbox    : {len(df_clean) - len(bbox)} points écartés")
-    poly = SPolygon([(lon, lat) for lat, lon in contour_uta])
+    # contour_uta (global) prime sur le parametre `contour`, comme dans le notebook.
+    # Si le global n'a pas encore ete renseigne par le pipeline (page ouverte trop
+    # tot), on retombe sur le parametre deja recu : meme contour UTA, pas de crash.
+    poly = SPolygon([(lon, lat) for lat, lon in (contour_uta or contour)])
     mask = bbox.apply(lambda r: poly.contains(Point(r['longitude'], r['latitude'])), axis=1)
     df_uta = bbox[mask].copy()
     print(f"Filtre polygone : {(~mask).sum()} points écartés")
