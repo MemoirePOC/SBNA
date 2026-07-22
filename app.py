@@ -67,7 +67,7 @@ st.subheader("Statistiques générales")
 synthese = fn.synthese_fr24(data.DATASET, aerodromes_locaux=["DRRN"])
 col1, col2 = st.columns([1, 1])
 with col1:
-    st.dataframe(synthese, use_container_width=True, hide_index=True)
+    st.dataframe(synthese.astype({"Valeur": str}), use_container_width=True, hide_index=True)
 with col2:
     st.metric("Nombre de vols (dataset combiné)", int(data.DATASET["icao24"].nunique()))
     st.metric("Plans de vol FPL chargés", len(data.FPL))
