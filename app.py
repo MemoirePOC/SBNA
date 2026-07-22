@@ -2,12 +2,6 @@
 """
 Page d'accueil du PoC Streamlit.
 
-Presentation, objectifs, carte de la zone d'etude et statistiques generales.
-Le chargement/nettoyage des donnees (Modules 1 a 7 du notebook) est
-declenche ici, une seule fois grace au cache (voir src/pipeline.py) : le
-"journal" de nettoyage qui s'affiche plus bas la premiere fois que l'app
-demarre correspond exactement aux tableaux produits par nettoyer_identifiants()
-dans le notebook.
 """
 
 import streamlit as st
@@ -17,7 +11,7 @@ from src import pipeline
 from src import functions as fn
 from src import maps
 
-st.set_page_config(page_title="PoC ATS Niamey", page_icon="✈️", layout="wide")
+st.set_page_config(page_title="PoC Sécurité et Performance ATS fondées sur les données trajectoires de surveillance à l'ASECNA", page_icon="✈️", layout="wide")
 
 st.title("PoC — Sécurité et performance ATS, espace aérien du Niger (Niamey)")
 
@@ -27,9 +21,6 @@ Cette application est la démonstration opérationnelle du Proof of Concept (PoC
 mémoire d'ingénieur *« Analyse des données de surveillance du trafic aérien à des fins de sécurité et
 performance ATS : démonstration de la valeur opérationnelle d'un dataset de trajectoires aériennes pour
 l'ASECNA — cas de l'espace aérien du Niger »*.
-
-Elle réutilise **telles quelles** les fonctions Python développées et validées dans le notebook du PoC ;
-seule la couche d'affichage est adaptée à Streamlit.
 """
 )
 
