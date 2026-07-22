@@ -1,0 +1,9 @@
+nom,type,lat,lon,altitude_m,altitude_ft,balisage
+Localizer/ILS,Antenna,13.483430555555556,2.2087611111111114,214.0,702,Marked - Red lighted
+ALD/ILS/DME,Antenna,13.480622222222223,2.172544444444444,228.0,748,Marked - Red lighted
+VOR/DME,Antenna,13.481119444444445,2.206875,220.0,722,Marked - Red lighted
+NDB NY,Antenna,13.480972222222222,2.1558333333333333,218.0,715,Unmarked
+Château d'eau,Building,13.479641666666668,2.184683333333333,230.41,756,Unmarked
+Obstacle Nouveau bloc,Antenna,13.47715,2.175958333333333,262.98,863,Marked - Red lighted
+Obstacle bloc Télécom,Antenna,13.477283333333334,2.175208333333333,233.94,768,Marked - Red lighted
+Radar météo,Antenna,13.477166666666667,2.1755999999999998,255.8,839,Marked - Red lighted
