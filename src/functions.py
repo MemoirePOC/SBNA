@@ -1022,7 +1022,7 @@ def ecart_lateral_m(lat, lon):
     return abs(axe_final.cross_track_distance(point, method="greatcircle"))
 
 
-def interpretation_ecart(val):
+def interpretation_ecart_m(val):
     if pd.isna(val):
         return np.nan
     if val <= 1:
@@ -1033,7 +1033,7 @@ def interpretation_ecart(val):
         return "Fortement décalé"
 
 
-def interpretation_instabilite(val):
+def interpretation_instabilite_m(val):
     if pd.isna(val):
         return np.nan
     if val <= 1:
@@ -1077,6 +1077,8 @@ def id5_alignement(df_app, cle="icao24"):
         d = g.apply(lambda r: ecart_lateral_m(r.latitude, r.longitude), axis=1)
         dmoy = np.abs(d).mean()
         sigma = d.std()
+        id5_ecart = 100 * dmoy / demi_largeur
+        id5_instab = 100 * sigma / demi_largeur
 
         lignes.append({
             "Date": g["timestamp"].iloc[-1].date(),
@@ -1084,9 +1086,11 @@ def id5_alignement(df_app, cle="icao24"):
             "icao24": g["icao24"].iloc[0],
             "Callsign": g["callsign"].iloc[0],
             "Ecart_moy_m": round(dmoy, 1),
-            "Interpretation_ecart": interpretation_ecart(dmoy),
+            "Id5_ecart (%)": round(id5_ecart, 1),
+            "Interpretation_ecart": interpretation_ecart_m(dmoy),
             "Sigma_m": round(sigma, 1),
-            "Interpretation_instabilite": interpretation_instabilite(sigma),
+            "Id5_instabilite (%)": round(id5_instab, 1),
+            "Interpretation_instabilite": interpretation_instabilite_m(sigma),
         })
 
     return pd.DataFrame(lignes).sort_values(["Date", "Heure_arrivee"])
